@@ -1,0 +1,458 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jul 26, 2026 at 10:45 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.31
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `pallettrack`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `audit_logs`
+--
+
+CREATE TABLE `audit_logs` (
+  `id` varchar(191) NOT NULL,
+  `user_id` varchar(191) DEFAULT NULL,
+  `user_email` varchar(190) DEFAULT NULL,
+  `action` varchar(80) NOT NULL,
+  `entity` varchar(80) DEFAULT NULL,
+  `entity_id` varchar(80) DEFAULT NULL,
+  `detail` text DEFAULT NULL,
+  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `audit_logs`
+--
+
+INSERT INTO `audit_logs` (`id`, `user_id`, `user_email`, `action`, `entity`, `entity_id`, `detail`, `created_at`) VALUES
+('cms0ox7s60003toroy5464ieb', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'register', 'Pallet', 'cms0ox7qy0001torousib5l33', 'Registered pallet PT-MS0OX7QT0FXG (wood)', '2026-07-25 18:16:16.038'),
+('cms1yxivs0007torogjpr3091', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'register', 'Pallet', 'cms1yxiuh0005toroocvgz0ox', 'Registered pallet PT-MS1YXIUCDVIC (metal)', '2026-07-26 15:44:12.760'),
+('cms1zihzk000ftorou6vflyru', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'admin_lost', 'Pallet', 'cms1yxiuh0005toroocvgz0ox', 'PT-MS1YXIUCDVIC: available → lost', '2026-07-26 16:00:31.376'),
+('cms20am9x000htorov5cgfybw', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_lookup', 'Pallet', 'cms0ox7qy0001torousib5l33', 'Scanned PT-MS0OX7QT0FXG (status: available)', '2026-07-26 16:22:23.301'),
+('cms20zqz1000jtorouxil966f', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_lookup', 'Pallet', 'cms0ox7qy0001torousib5l33', 'Scanned PT-MS0OX7QT0FXG (status: available)', '2026-07-26 16:41:55.790'),
+('cms20zv0p000ltoroby9d45it', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_not_found', 'Pallet', NULL, 'Scan attempt for code: PT-MS0OX7QT0FXGf', '2026-07-26 16:42:01.033'),
+('cms20zxmj000ntorolnbstt6t', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_lookup', 'Pallet', 'cms0ox7qy0001torousib5l33', 'Scanned PT-MS0OX7QT0FXG (status: available)', '2026-07-26 16:42:04.411'),
+('cms210nus000rtorosl5asorq', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'load', 'Pallet', 'cms0ox7qy0001torousib5l33', 'PT-MS0OX7QT0FXG: available → loaded', '2026-07-26 16:42:38.405'),
+('cms2215nc000utoromli3lhfg', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'settings_update', 'Setting', NULL, 'material_types=[\"plastic\",\"wood\",\"metal\",\"composite\",\"test\"]', '2026-07-26 17:11:01.080'),
+('cms2294b6000wtorokbti1q84', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_lookup', 'Pallet', 'cms0ox7qy0001torousib5l33', 'Scanned PT-MS0OX7QT0FXG (status: loaded)', '2026-07-26 17:17:12.595'),
+('cms24ew130001to6sw4zjtd6n', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_not_found', 'Pallet', NULL, 'Scan attempt for code: PT-MS1', '2026-07-26 18:17:41.031'),
+('cms24expj0003to6s7te4tp0n', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_not_found', 'Pallet', NULL, 'Scan attempt for code: PT-MS1', '2026-07-26 18:17:43.208'),
+('cms24f2sn0005to6sbic9kqo3', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_lookup', 'Pallet', 'cms1yxiuh0005toroocvgz0ox', 'Scanned PT-MS1YXIUCDVIC (status: lost)', '2026-07-26 18:17:49.800'),
+('cms24jrt50009to6ss7mgxwz0', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'register', 'Pallet', 'cms24jrrz0007to6sw5p6es3j', 'Registered pallet PT-MS24JRRVQ46N (plastic)', '2026-07-26 18:21:28.841'),
+('cms2513lq000bto6sfrmf8mad', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_lookup', 'Pallet', 'cms24jrrz0007to6sw5p6es3j', 'Scanned PT-MS24JRRVQ46N (status: available)', '2026-07-26 18:34:57.278'),
+('cms251rt5000fto6s3zhas44o', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'load', 'Pallet', 'cms24jrrz0007to6sw5p6es3j', 'PT-MS24JRRVQ46N: available → loaded', '2026-07-26 18:35:28.650'),
+('cms251u8w000hto6sq7vwxruc', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_lookup', 'Pallet', 'cms24jrrz0007to6sw5p6es3j', 'Scanned PT-MS24JRRVQ46N (status: loaded)', '2026-07-26 18:35:31.809'),
+('cms252fso000jto6sc38mp4xt', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_lookup', 'Pallet', 'cms24jrrz0007to6sw5p6es3j', 'Scanned PT-MS24JRRVQ46N (status: loaded)', '2026-07-26 18:35:59.736'),
+('cms25303t000nto6s7opjdq6w', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'dispatch', 'Pallet', 'cms24jrrz0007to6sw5p6es3j', 'PT-MS24JRRVQ46N: loaded → in_transit', '2026-07-26 18:36:26.058'),
+('cms2535iy000pto6sfyvlvgdm', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_lookup', 'Pallet', 'cms24jrrz0007to6sw5p6es3j', 'Scanned PT-MS24JRRVQ46N (status: in_transit)', '2026-07-26 18:36:33.083'),
+('cms254cok000rto6stfp4hb6z', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_lookup', 'Pallet', 'cms24jrrz0007to6sw5p6es3j', 'Scanned PT-MS24JRRVQ46N (status: in_transit)', '2026-07-26 18:37:29.012'),
+('cms255dfk000vto6scjg496f2', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'deliver', 'Pallet', 'cms24jrrz0007to6sw5p6es3j', 'PT-MS24JRRVQ46N: in_transit → delivered', '2026-07-26 18:38:16.640'),
+('cms26rrt40011to6slkfnwwvt', 'cms0ojv9p0001to6wapjutguk', 'manufacturing@pallettrack.local', 'register', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Registered pallet PT-MS26RRQTOQJG (composite)', '2026-07-26 19:23:41.321'),
+('cms26txs10013to6st8fqtixz', 'cms0ojv9p0001to6wapjutguk', 'manufacturing@pallettrack.local', 'scan_permission_denied', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Role manufacturing cannot act on status available', '2026-07-26 19:25:22.369'),
+('cms26uxdn0015to6s9ebb0hwa', 'cms0ojv9y0002to6whs6tssup', 'loader@pallettrack.local', 'scan_lookup', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Scanned PT-MS26RRQTOQJG (status: available)', '2026-07-26 19:26:08.507'),
+('cms26w3tp0019to6szht3u0ey', 'cms0ojv9y0002to6whs6tssup', 'loader@pallettrack.local', 'load', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'PT-MS26RRQTOQJG: available → loaded', '2026-07-26 19:27:03.517'),
+('cms26wmh5001bto6s5ylny233', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_lookup', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Scanned PT-MS26RRQTOQJG (status: loaded)', '2026-07-26 19:27:27.689'),
+('cms26xbdr001dto6s4lintcvp', 'cms0ojv9y0002to6whs6tssup', 'loader@pallettrack.local', 'scan_permission_denied', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Role warehouse_loader cannot act on status loaded', '2026-07-26 19:27:59.967'),
+('cms26xl4b001fto6sihay8ikw', 'cms0ojva20003to6wqpsorvn9', 'dispatcher@pallettrack.local', 'scan_lookup', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Scanned PT-MS26RRQTOQJG (status: loaded)', '2026-07-26 19:28:12.587'),
+('cms26ygan001jto6s12f01yzs', 'cms0ojva20003to6wqpsorvn9', 'dispatcher@pallettrack.local', 'dispatch', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'PT-MS26RRQTOQJG: loaded → in_transit', '2026-07-26 19:28:52.991'),
+('cms26yime001lto6szjcrwb3t', 'cms0ojva20003to6wqpsorvn9', 'dispatcher@pallettrack.local', 'scan_permission_denied', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Role dispatcher cannot act on status in_transit', '2026-07-26 19:28:56.007'),
+('cms26z9hr001nto6supx63spx', 'cms0ojva60004to6wnfmjxpbt', 'receiver@pallettrack.local', 'scan_lookup', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Scanned PT-MS26RRQTOQJG (status: in_transit)', '2026-07-26 19:29:30.831'),
+('cms26zow1001rto6socst76gz', 'cms0ojva60004to6wnfmjxpbt', 'receiver@pallettrack.local', 'deliver', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'PT-MS26RRQTOQJG: in_transit → delivered', '2026-07-26 19:29:50.785'),
+('cms26zqvj001tto6sfrgclzcl', 'cms0ojva60004to6wnfmjxpbt', 'receiver@pallettrack.local', 'scan_permission_denied', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Role delivery_receiver cannot act on status delivered', '2026-07-26 19:29:53.359'),
+('cms270ke9001vto6sebjiaxwi', 'cms0ojvab0005to6wig4dy6kv', 'collector@pallettrack.local', 'scan_lookup', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Scanned PT-MS26RRQTOQJG (status: delivered)', '2026-07-26 19:30:31.617'),
+('cms271dn7001zto6slnhklfrp', 'cms0ojvab0005to6wig4dy6kv', 'collector@pallettrack.local', 'return_pickup', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'PT-MS26RRQTOQJG: delivered → returning', '2026-07-26 19:31:09.523'),
+('cms271fb70021to6s6fhjm14y', 'cms0ojvab0005to6wig4dy6kv', 'collector@pallettrack.local', 'scan_permission_denied', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Role return_collector cannot act on status returning', '2026-07-26 19:31:11.683'),
+('cms271xsq0023to6saa149v6c', 'cms0ojvae0006to6wr0rd7dda', 'factory@pallettrack.local', 'scan_lookup', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Scanned PT-MS26RRQTOQJG (status: returning)', '2026-07-26 19:31:35.642'),
+('cms272a130027to6s4qkx6qqc', 'cms0ojvae0006to6wr0rd7dda', 'factory@pallettrack.local', 'receive_factory', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'PT-MS26RRQTOQJG: returning → available', '2026-07-26 19:31:51.495'),
+('cms272bjj0029to6szp386yrf', 'cms0ojvae0006to6wr0rd7dda', 'factory@pallettrack.local', 'scan_permission_denied', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Role factory_receiver cannot act on status available', '2026-07-26 19:31:53.455'),
+('cms272tee002bto6su7mj81ti', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_lookup', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Scanned PT-MS26RRQTOQJG (status: available)', '2026-07-26 19:32:16.599'),
+('cms277d4q002dto6s6qkdtbp1', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_lookup', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Scanned PT-MS26RRQTOQJG (status: available)', '2026-07-26 19:35:48.795'),
+('cms2789ke002fto6suuxn799i', 'cms0ojv9y0002to6whs6tssup', 'loader@pallettrack.local', 'scan_lookup', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Scanned PT-MS26RRQTOQJG (status: available)', '2026-07-26 19:36:30.830'),
+('cms278nqe002jto6sf2jvf6jz', 'cms0ojv9y0002to6whs6tssup', 'loader@pallettrack.local', 'load', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'PT-MS26RRQTOQJG: available → loaded', '2026-07-26 19:36:49.190'),
+('cms278r00002lto6skltj1p5m', 'cms0ojv9y0002to6whs6tssup', 'loader@pallettrack.local', 'scan_permission_denied', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Role warehouse_loader cannot act on status loaded', '2026-07-26 19:36:53.424'),
+('cms27b1tl002nto6srxqvqjkx', 'cms0ojv9y0002to6whs6tssup', 'loader@pallettrack.local', 'scan_permission_denied', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Role warehouse_loader cannot act on status loaded', '2026-07-26 19:38:40.761'),
+('cms27bfco002pto6srsjtmey0', 'cms0ojva20003to6wqpsorvn9', 'dispatcher@pallettrack.local', 'scan_lookup', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Scanned PT-MS26RRQTOQJG (status: loaded)', '2026-07-26 19:38:58.297'),
+('cms27c3fo002tto6s7ytrewck', 'cms0ojva20003to6wqpsorvn9', 'dispatcher@pallettrack.local', 'dispatch', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'PT-MS26RRQTOQJG: loaded → in_transit', '2026-07-26 19:39:29.509'),
+('cms27c5ip002vto6spbefn7d2', 'cms0ojva20003to6wqpsorvn9', 'dispatcher@pallettrack.local', 'scan_permission_denied', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Role dispatcher cannot act on status in_transit', '2026-07-26 19:39:32.210'),
+('cms27cob2002xto6sskkkqdje', 'cms0ojva60004to6wnfmjxpbt', 'receiver@pallettrack.local', 'scan_lookup', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Scanned PT-MS26RRQTOQJG (status: in_transit)', '2026-07-26 19:39:56.558'),
+('cms27d7bz0031to6shol8vrig', 'cms0ojva60004to6wnfmjxpbt', 'receiver@pallettrack.local', 'deliver', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'PT-MS26RRQTOQJG: in_transit → delivered', '2026-07-26 19:40:21.215'),
+('cms27f0oj0033to6sihkaaqgj', 'cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'scan_lookup', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Scanned PT-MS26RRQTOQJG (status: delivered)', '2026-07-26 19:41:45.908'),
+('cms27ghro0035to6seycudacm', 'cms0ojva60004to6wnfmjxpbt', 'receiver@pallettrack.local', 'scan_permission_denied', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Role delivery_receiver cannot act on status delivered', '2026-07-26 19:42:54.709'),
+('cms27h1iw0037to6s06v16kpi', 'cms0ojvab0005to6wig4dy6kv', 'collector@pallettrack.local', 'scan_lookup', 'Pallet', 'cms26rrqx000xto6surdqq9wc', 'Scanned PT-MS26RRQTOQJG (status: delivered)', '2026-07-26 19:43:20.312'),
+('cms28c0rc0039to6s3bus676s', 'cms0ojvab0005to6wig4dy6kv', 'collector@pallettrack.local', 'scan_not_found', 'Pallet', NULL, 'Scan attempt for code: sdfsdf', '2026-07-26 20:07:25.656');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `damage_records`
+--
+
+CREATE TABLE `damage_records` (
+  `id` varchar(191) NOT NULL,
+  `pallet_id` varchar(191) NOT NULL,
+  `reported_by_id` varchar(191) DEFAULT NULL,
+  `description` text NOT NULL,
+  `photoUrls` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`photoUrls`)),
+  `resolved` tinyint(1) NOT NULL DEFAULT 0,
+  `resolved_at` datetime(3) DEFAULT NULL,
+  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `drivers`
+--
+
+CREATE TABLE `drivers` (
+  `id` varchar(191) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `phone` varchar(30) DEFAULT NULL,
+  `license_no` varchar(50) DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `notes` varchar(255) DEFAULT NULL,
+  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
+  `updated_at` datetime(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `drivers`
+--
+
+INSERT INTO `drivers` (`id`, `name`, `phone`, `license_no`, `active`, `notes`, `created_at`, `updated_at`) VALUES
+('cms234ae10001top01ug58dmu', 'Faisal', '+96895305730', 'L-123456789', 1, 'This is driver testing.', '2026-07-26 17:41:26.809', '2026-07-26 17:49:45.903');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `movements`
+--
+
+CREATE TABLE `movements` (
+  `id` varchar(191) NOT NULL,
+  `pallet_id` varchar(191) NOT NULL,
+  `user_id` varchar(191) DEFAULT NULL,
+  `action` enum('register','load','dispatch','deliver','return_pickup','receive_factory','mark_damaged','begin_repair','complete_repair','retire','mark_lost','admin_override') NOT NULL,
+  `from_status` enum('available','loaded','in_transit','delivered','returning','damaged','under_repair','retired','lost') DEFAULT NULL,
+  `to_status` enum('available','loaded','in_transit','delivered','returning','damaged','under_repair','retired','lost') DEFAULT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`payload`)),
+  `note` varchar(500) DEFAULT NULL,
+  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `movements`
+--
+
+INSERT INTO `movements` (`id`, `pallet_id`, `user_id`, `action`, `from_status`, `to_status`, `payload`, `note`, `created_at`) VALUES
+('cms1zihuh000dtorow8jxf0xq', 'cms1yxiuh0005toroocvgz0ox', 'cms0ojv9h0000to6wt6hl1qxf', 'mark_lost', 'available', 'lost', NULL, 'Duplicate registration', '2026-07-26 16:00:31.193'),
+('cms210nt4000ptoro0e3tha4m', 'cms0ox7qy0001torousib5l33', 'cms0ojv9h0000to6wt6hl1qxf', 'load', 'available', 'loaded', '{\"products\":[{\"sku\":\"1.5 ML x 12\",\"qty\":200,\"lot\":\"B001\",\"weight\":200}]}', NULL, '2026-07-26 16:42:38.313'),
+('cms251rst000dto6spavc34gv', 'cms24jrrz0007to6sw5p6es3j', 'cms0ojv9h0000to6wt6hl1qxf', 'load', 'available', 'loaded', '{\"products\":[{\"sku\":\"1 Gallon Bottle\",\"qty\":100,\"lot\":\"B-Gallon001\",\"weight\":100}]}', NULL, '2026-07-26 18:35:28.637'),
+('cms25303i000lto6sdyengzdk', 'cms24jrrz0007to6sw5p6es3j', 'cms0ojv9h0000to6wt6hl1qxf', 'dispatch', 'loaded', 'in_transit', '{\"truckNumber\":\"Y-5796\",\"driverName\":\"Faisal\",\"driverContact\":\"+96895305730\",\"destination\":\"Faisal-New Salalah\",\"expectedDelivery\":\"2026-07-27\",\"notes\":\"Dispatching to Customer.\"}', NULL, '2026-07-26 18:36:26.046'),
+('cms255df7000tto6s5gb8cxxs', 'cms24jrrz0007to6sw5p6es3j', 'cms0ojv9h0000to6wt6hl1qxf', 'deliver', 'in_transit', 'delivered', '{\"receiverName\":\"Rana\",\"receiverContact\":\"+96892331373\",\"notes\":\"\"}', 'Nothing deliver to customer.', '2026-07-26 18:38:16.626'),
+('cms26rrsw000zto6s2ihxl52l', 'cms26rrqx000xto6surdqq9wc', 'cms0ojv9p0001to6wapjutguk', 'register', NULL, 'available', NULL, 'Pallet PT-MS26RRQTOQJG manufactured and registered at factory', '2026-07-26 19:23:41.312'),
+('cms26w3ta0017to6sdz9n2c41', 'cms26rrqx000xto6surdqq9wc', 'cms0ojv9y0002to6whs6tssup', 'load', 'available', 'loaded', '{\"products\":[{\"sku\":\"5 Gallon Water Bottles\",\"qty\":50,\"lot\":\"A\",\"weight\":100}]}', NULL, '2026-07-26 19:27:03.501'),
+('cms26ygac001hto6ssfg9gi2m', 'cms26rrqx000xto6surdqq9wc', 'cms0ojva20003to6wqpsorvn9', 'dispatch', 'loaded', 'in_transit', '{\"truckNumber\":\"Y-5796\",\"driverName\":\"Faisal\",\"driverContact\":\"+96895305730\",\"destination\":\"Arham Shop\",\"expectedDelivery\":\"2026-07-27\",\"notes\":\"Dispatch to Faisal driver to Arham shop\"}', NULL, '2026-07-26 19:28:52.980'),
+('cms26zovp001pto6sfppaxcn5', 'cms26rrqx000xto6surdqq9wc', 'cms0ojva60004to6wnfmjxpbt', 'deliver', 'in_transit', 'delivered', '{\"receiverName\":\"Arham Faisal\",\"receiverContact\":\"+96892331373\",\"notes\":\"Deliver to Arham shop .\"}', NULL, '2026-07-26 19:29:50.773'),
+('cms271dmz001xto6st9r97m20', 'cms26rrqx000xto6surdqq9wc', 'cms0ojvab0005to6wig4dy6kv', 'return_pickup', 'delivered', 'returning', '{\"pickupDriver\":\"Faisal\",\"condition\":\"Good\",\"notes\":\"Pickup from Arham Shop and driver name is Faisal\"}', NULL, '2026-07-26 19:31:09.514'),
+('cms272a0j0025to6sgmem7vrm', 'cms26rrqx000xto6surdqq9wc', 'cms0ojvae0006to6wr0rd7dda', 'receive_factory', 'returning', 'available', '{\"inspector\":\"Rana\",\"condition\":\"Good\",\"damageDesc\":\"\",\"notes\":\"Received in Factory.\"}', NULL, '2026-07-26 19:31:51.475'),
+('cms278nq7002hto6swhsvzaf6', 'cms26rrqx000xto6surdqq9wc', 'cms0ojv9y0002to6whs6tssup', 'load', 'available', 'loaded', '{\"products\":[{\"sku\":\"1.5 Liter Bottles\",\"qty\":100,\"lot\":\"B\",\"weight\":200}]}', NULL, '2026-07-26 19:36:49.182'),
+('cms27c3fd002rto6sm413cdck', 'cms26rrqx000xto6surdqq9wc', 'cms0ojva20003to6wqpsorvn9', 'dispatch', 'loaded', 'in_transit', '{\"truckNumber\":\"Y-5796\",\"driverName\":\"Faisal\",\"driverContact\":\"+96895305730\",\"destination\":\"Rana Haad\",\"expectedDelivery\":\"2026-07-27\",\"notes\":\"Deliver to Rana Haad customer pickup by Faisal\"}', NULL, '2026-07-26 19:39:29.497'),
+('cms27d7bn002zto6sil4a6so9', 'cms26rrqx000xto6surdqq9wc', 'cms0ojva60004to6wnfmjxpbt', 'deliver', 'in_transit', 'delivered', '{\"receiverName\":\"Haad Faisal\",\"receiverContact\":\"+9689636988\",\"notes\":\"Haad faisal.\"}', NULL, '2026-07-26 19:40:21.203');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` varchar(191) NOT NULL,
+  `user_id` varchar(191) DEFAULT NULL,
+  `type` enum('overdue_return','damaged_pallet','delivery_delayed','dwell_time_exceeded','new_batch_manufactured','inventory_below_threshold','system') NOT NULL DEFAULT 'system',
+  `title` varchar(120) NOT NULL,
+  `message` text NOT NULL,
+  `read` tinyint(1) NOT NULL DEFAULT 0,
+  `link` varchar(120) DEFAULT NULL,
+  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pallets`
+--
+
+CREATE TABLE `pallets` (
+  `id` varchar(191) NOT NULL,
+  `pallet_number` varchar(32) NOT NULL,
+  `qr_code` varchar(64) NOT NULL,
+  `status` enum('available','loaded','in_transit','delivered','returning','damaged','under_repair','retired','lost') NOT NULL DEFAULT 'available',
+  `manufacture_date` date NOT NULL,
+  `material_type` varchar(60) NOT NULL,
+  `dimensions` varchar(60) NOT NULL,
+  `weight_capacity` decimal(10,2) NOT NULL,
+  `cost` decimal(12,3) NOT NULL,
+  `notes` text DEFAULT NULL,
+  `trip_count` int(11) NOT NULL DEFAULT 0,
+  `printed_at` datetime(3) DEFAULT NULL,
+  `current_user_id` varchar(191) DEFAULT NULL,
+  `current_location` varchar(120) DEFAULT NULL,
+  `return_due_date` date DEFAULT NULL,
+  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
+  `updated_at` datetime(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `pallets`
+--
+
+INSERT INTO `pallets` (`id`, `pallet_number`, `qr_code`, `status`, `manufacture_date`, `material_type`, `dimensions`, `weight_capacity`, `cost`, `notes`, `trip_count`, `printed_at`, `current_user_id`, `current_location`, `return_due_date`, `created_at`, `updated_at`) VALUES
+('cms0ox7qy0001torousib5l33', 'PT-MS0OX7QT0FXG', '8a00d8cc-4f57-4caf-9593-221e2b450cb0', 'loaded', '2026-07-25', 'wood', '1200x800x50', 500.00, 25.000, 'Nothing.', 0, '2026-07-25 18:36:43.196', 'cms0ojv9h0000to6wt6hl1qxf', NULL, NULL, '2026-07-25 18:16:15.994', '2026-07-26 16:42:38.313'),
+('cms1yxiuh0005toroocvgz0ox', 'PT-MS1YXIUCDVIC', '68c835a9-cf10-4c13-bec7-383e3b46e3a4', 'lost', '2026-07-26', 'metal', '1200x1800x300', 200.00, 30.000, 'Duplicate registration', 0, NULL, 'cms0ojv9h0000to6wt6hl1qxf', NULL, NULL, '2026-07-26 15:44:12.713', '2026-07-26 16:00:31.245'),
+('cms24jrrz0007to6sw5p6es3j', 'PT-MS24JRRVQ46N', 'fdf50823-e3c7-4fb8-b8ee-6ac4610ca817', 'delivered', '2026-07-26', 'plastic', '1200X800X20', 100.00, 15.000, 'This is for testing.', 0, '2026-07-26 18:22:39.604', 'cms0ojv9h0000to6wt6hl1qxf', 'Truck: Y-5796', '2026-08-09', '2026-07-26 18:21:28.799', '2026-07-26 18:38:16.626'),
+('cms26rrqx000xto6surdqq9wc', 'PT-MS26RRQTOQJG', 'd3dcd940-fd4c-44b9-be37-66e07cb16695', 'delivered', '2026-07-26', 'composite', '1200x200x05', 100.00, 15.000, 'Composite Pallet details.', 1, NULL, 'cms0ojva60004to6wnfmjxpbt', 'Truck: Y-5796', '2026-08-09', '2026-07-26 19:23:41.241', '2026-07-26 19:40:21.203');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `settings`
+--
+
+CREATE TABLE `settings` (
+  `id` varchar(191) NOT NULL,
+  `key` varchar(191) NOT NULL,
+  `value` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `settings`
+--
+
+INSERT INTO `settings` (`id`, `key`, `value`) VALUES
+('cms0ojvam0008to6w6ptsrv4y', 'return_window_days', '14'),
+('cms0ojvau0009to6w7kfu6aiy', 'low_inventory_threshold', '50'),
+('cms2215ht000storon9ah0lx0', 'material_types', '[\"plastic\",\"wood\",\"metal\",\"composite\",\"test\"]');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `trucks`
+--
+
+CREATE TABLE `trucks` (
+  `id` varchar(191) NOT NULL,
+  `plate_number` varchar(30) NOT NULL,
+  `model` varchar(80) NOT NULL DEFAULT '',
+  `capacity` int(11) NOT NULL DEFAULT 0,
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `notes` varchar(255) DEFAULT NULL,
+  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
+  `updated_at` datetime(3) NOT NULL,
+  `assigned_driver_id` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `trucks`
+--
+
+INSERT INTO `trucks` (`id`, `plate_number`, `model`, `capacity`, `active`, `notes`, `created_at`, `updated_at`, `assigned_driver_id`) VALUES
+('cms233poa0000top0qh8gq4sc', 'Y-5796', 'Mercedes', 50, 1, 'This is testing.', '2026-07-26 17:40:59.962', '2026-07-26 18:20:38.787', 'cms234ae10001top01ug58dmu');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` varchar(191) NOT NULL,
+  `email` varchar(191) NOT NULL,
+  `name` varchar(191) NOT NULL,
+  `phone` varchar(191) DEFAULT NULL,
+  `password_hash` varchar(255) NOT NULL,
+  `role` enum('administrator','manufacturing','warehouse_loader','dispatcher','delivery_receiver','return_collector','factory_receiver','manager') NOT NULL DEFAULT 'delivery_receiver',
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
+  `updated_at` datetime(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `name`, `phone`, `password_hash`, `role`, `active`, `created_at`, `updated_at`) VALUES
+('cms0ojv9h0000to6wt6hl1qxf', 'admin@pallettrack.local', 'Admin User', NULL, '$2b$10$yIPhafPyi7Rbtvv8ZVXSLuj3Pr2uYjW21LsZav6EtAcyQ9Y0dmg/q', 'administrator', 1, '2026-07-25 18:05:53.285', '2026-07-25 18:05:53.285'),
+('cms0ojv9p0001to6wapjutguk', 'manufacturing@pallettrack.local', 'Factory Worker', NULL, '$2b$10$yIPhafPyi7Rbtvv8ZVXSLuj3Pr2uYjW21LsZav6EtAcyQ9Y0dmg/q', 'manufacturing', 1, '2026-07-25 18:05:53.293', '2026-07-25 18:05:53.293'),
+('cms0ojv9y0002to6whs6tssup', 'loader@pallettrack.local', 'Warehouse Loader', NULL, '$2b$10$yIPhafPyi7Rbtvv8ZVXSLuj3Pr2uYjW21LsZav6EtAcyQ9Y0dmg/q', 'warehouse_loader', 1, '2026-07-25 18:05:53.302', '2026-07-25 18:05:53.302'),
+('cms0ojva20003to6wqpsorvn9', 'dispatcher@pallettrack.local', 'Dispatcher', NULL, '$2b$10$yIPhafPyi7Rbtvv8ZVXSLuj3Pr2uYjW21LsZav6EtAcyQ9Y0dmg/q', 'dispatcher', 1, '2026-07-25 18:05:53.306', '2026-07-25 18:05:53.306'),
+('cms0ojva60004to6wnfmjxpbt', 'receiver@pallettrack.local', 'Delivery Receiver', NULL, '$2b$10$yIPhafPyi7Rbtvv8ZVXSLuj3Pr2uYjW21LsZav6EtAcyQ9Y0dmg/q', 'delivery_receiver', 1, '2026-07-25 18:05:53.310', '2026-07-25 18:05:53.310'),
+('cms0ojvab0005to6wig4dy6kv', 'collector@pallettrack.local', 'Return Collector', NULL, '$2b$10$yIPhafPyi7Rbtvv8ZVXSLuj3Pr2uYjW21LsZav6EtAcyQ9Y0dmg/q', 'return_collector', 1, '2026-07-25 18:05:53.315', '2026-07-25 18:05:53.315'),
+('cms0ojvae0006to6wr0rd7dda', 'factory@pallettrack.local', 'Factory Receiver', NULL, '$2b$10$yIPhafPyi7Rbtvv8ZVXSLuj3Pr2uYjW21LsZav6EtAcyQ9Y0dmg/q', 'factory_receiver', 1, '2026-07-25 18:05:53.319', '2026-07-25 18:05:53.319'),
+('cms0ojvai0007to6wq82ymcto', 'manager@pallettrack.local', 'Operations Manager', NULL, '$2b$10$yIPhafPyi7Rbtvv8ZVXSLuj3Pr2uYjW21LsZav6EtAcyQ9Y0dmg/q', 'manager', 1, '2026-07-25 18:05:53.322', '2026-07-25 18:05:53.322');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `_prisma_migrations`
+--
+
+CREATE TABLE `_prisma_migrations` (
+  `id` varchar(36) NOT NULL,
+  `checksum` varchar(64) NOT NULL,
+  `finished_at` datetime(3) DEFAULT NULL,
+  `migration_name` varchar(255) NOT NULL,
+  `logs` text DEFAULT NULL,
+  `rolled_back_at` datetime(3) DEFAULT NULL,
+  `started_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
+  `applied_steps_count` int(10) UNSIGNED NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `_prisma_migrations`
+--
+
+INSERT INTO `_prisma_migrations` (`id`, `checksum`, `finished_at`, `migration_name`, `logs`, `rolled_back_at`, `started_at`, `applied_steps_count`) VALUES
+('3d413e27-3d97-4405-b19f-6aae01fcfe6d', '5a32161ad232249fb3ca43683cc8ec2733c2379bd7645e54c7efc3927a6271eb', '2026-07-25 18:05:08.811', '20260725180508_init', NULL, NULL, '2026-07-25 18:05:08.400', 1),
+('8476ea24-fed7-4809-bb74-74dd6a075e5b', '2fd35a9b10160ec42612dfd02f2ef540ba9e685fd78bd211d2da18fc63dde94e', '2026-07-26 17:48:24.395', '20260726174824_add_truck_assignment', NULL, NULL, '2026-07-26 17:48:24.382', 1),
+('9cc84790-7cca-4748-9723-e7661467ff20', 'b2a39f99adc32b16900ed947131174dbfad1c19cd9f47d8a11c18e1d6dc95777', '2026-07-26 17:24:13.517', '20260726172413_add_fleet', NULL, NULL, '2026-07-26 17:24:13.448', 1);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `audit_logs`
+--
+ALTER TABLE `audit_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `audit_logs_created_at_idx` (`created_at`),
+  ADD KEY `audit_logs_action_idx` (`action`),
+  ADD KEY `audit_logs_user_id_fkey` (`user_id`);
+
+--
+-- Indexes for table `damage_records`
+--
+ALTER TABLE `damage_records`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `damage_records_pallet_id_idx` (`pallet_id`),
+  ADD KEY `damage_records_reported_by_id_fkey` (`reported_by_id`);
+
+--
+-- Indexes for table `drivers`
+--
+ALTER TABLE `drivers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `movements`
+--
+ALTER TABLE `movements`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `movements_pallet_id_created_at_idx` (`pallet_id`,`created_at`),
+  ADD KEY `movements_action_idx` (`action`),
+  ADD KEY `movements_user_id_fkey` (`user_id`);
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `notifications_user_id_read_idx` (`user_id`,`read`),
+  ADD KEY `notifications_created_at_idx` (`created_at`);
+
+--
+-- Indexes for table `pallets`
+--
+ALTER TABLE `pallets`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `pallets_pallet_number_key` (`pallet_number`),
+  ADD UNIQUE KEY `pallets_qr_code_key` (`qr_code`),
+  ADD KEY `pallets_status_idx` (`status`),
+  ADD KEY `pallets_current_user_id_idx` (`current_user_id`);
+
+--
+-- Indexes for table `settings`
+--
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `settings_key_key` (`key`);
+
+--
+-- Indexes for table `trucks`
+--
+ALTER TABLE `trucks`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `trucks_plate_number_key` (`plate_number`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `users_email_key` (`email`);
+
+--
+-- Indexes for table `_prisma_migrations`
+--
+ALTER TABLE `_prisma_migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `audit_logs`
+--
+ALTER TABLE `audit_logs`
+  ADD CONSTRAINT `audit_logs_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `damage_records`
+--
+ALTER TABLE `damage_records`
+  ADD CONSTRAINT `damage_records_pallet_id_fkey` FOREIGN KEY (`pallet_id`) REFERENCES `pallets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `damage_records_reported_by_id_fkey` FOREIGN KEY (`reported_by_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `movements`
+--
+ALTER TABLE `movements`
+  ADD CONSTRAINT `movements_pallet_id_fkey` FOREIGN KEY (`pallet_id`) REFERENCES `pallets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `movements_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `pallets`
+--
+ALTER TABLE `pallets`
+  ADD CONSTRAINT `pallets_current_user_id_fkey` FOREIGN KEY (`current_user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

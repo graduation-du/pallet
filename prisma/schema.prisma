@@ -1,0 +1,268 @@
+// PalletTrack Pro — MySQL (XAMPP MariaDB) via Prisma
+// Phase 1: users + auth · Phase 2: pallets + QR + scan workflow · Phase 3: dashboard + reports
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// ROLES — 8 roles per PRD §6
+// ============================================================
+enum Role {
+  administrator
+  manufacturing
+  warehouse_loader
+  dispatcher
+  delivery_receiver
+  return_collector
+  factory_receiver
+  manager
+}
+
+// ============================================================
+// PALLET STATUS — state machine per PRD §10
+// ============================================================
+enum PalletStatus {
+  available
+  loaded
+  in_transit
+  delivered
+  returning
+  damaged
+  under_repair
+  retired
+  lost
+}
+
+// ============================================================
+// MOVEMENT ACTION — one per successful scan / state transition
+// ============================================================
+enum MovementAction {
+  register
+  load
+  dispatch
+  deliver
+  return_pickup
+  receive_factory
+  mark_damaged
+  begin_repair
+  complete_repair
+  retire
+  mark_lost
+  admin_override
+}
+
+// ============================================================
+// USERS
+// ============================================================
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  phone        String?
+  passwordHash String   @map("password_hash") @db.VarChar(255)
+  role         Role     @default(delivery_receiver)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  movements          Movement[]
+  auditLogs          AuditLog[]
+  notifications      Notification[]
+  palletsHeld        Pallet[]         @relation("PalletHolder")
+  damageReports      DamageRecord[]   @relation("DamageReporter")
+
+  @@map("users")
+}
+
+// ============================================================
+// PALLETS — one physical pallet = one permanent QR code
+// ============================================================
+model Pallet {
+  id              String       @id @default(cuid())
+  /// Printed on label — unique forever. Never reuse for another pallet.
+  palletNumber    String       @unique @map("pallet_number") @db.VarChar(32)
+  /// Permanent QR code payload (UUID). Same code for the pallet's whole life.
+  qrCode          String       @unique @map("qr_code") @db.VarChar(64)
+  status          PalletStatus @default(available)
+
+  // Manufacturing / registration details (FR-1.1)
+  manufactureDate DateTime     @db.Date @map("manufacture_date")
+  materialType    String       @map("material_type") @db.VarChar(60)
+  dimensions      String       @db.VarChar(60)
+  weightCapacity  Decimal      @map("weight_capacity") @db.Decimal(10, 2)
+  cost            Decimal      @db.Decimal(12, 3)
+  notes           String?      @db.Text
+
+  // Lifecycle counters
+  tripCount       Int          @default(0) @map("trip_count")
+  /// When the QR label was printed (null = not yet printed)
+  printedAt       DateTime?    @map("printed_at")
+  /// Currently responsible user (who last acted on it)
+  currentUserId   String?      @map("current_user_id")
+  /// Current location label (warehouse / customer / truck)
+  currentLocation String?      @map("current_location") @db.VarChar(120)
+  /// Return-due date, calculated on delivery (FR-5.2)
+  returnDueDate   DateTime?    @map("return_due_date") @db.Date
+
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+
+  movements       Movement[]
+  damageRecords   DamageRecord[]
+  currentUser     User?        @relation("PalletHolder", fields: [currentUserId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([currentUserId])
+  @@map("pallets")
+}
+
+// ============================================================
+// MOVEMENTS — append-only timeline for a pallet QR (FR-2.4)
+// ============================================================
+model Movement {
+  id          String         @id @default(cuid())
+  palletId    String         @map("pallet_id")
+  userId      String?        @map("user_id")
+  action      MovementAction
+  fromStatus  PalletStatus?  @map("from_status")
+  toStatus    PalletStatus?  @map("to_status")
+
+  // Form payload snapshots per action type (JSON encoded)
+  // FR-3.1 load: {products:[{sku,qty,lot,weight}]}
+  // FR-4.1 dispatch: {truckNumber, driverName, driverContact, destination, expectedDelivery, notes}
+  // FR-5.1 deliver: {receiverName, receiverContact, signatureUrl?, photoUrls?[]}
+  // FR-6.1 pickup: {pickupDriver, condition, notes}
+  // FR-7.1 receive: {inspector, checklist, condition, damageDesc?, photoUrls?[]}
+  payload     Json?
+
+  note        String?        @db.VarChar(500)
+  createdAt   DateTime       @default(now()) @map("created_at")
+
+  pallet      Pallet         @relation(fields: [palletId], references: [id], onDelete: Cascade)
+  user        User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([palletId, createdAt])
+  @@index([action])
+  @@map("movements")
+}
+
+// ============================================================
+// DAMAGE RECORDS — created when a returning pallet is flagged damaged (FR-7.3)
+// ============================================================
+model DamageRecord {
+  id           String   @id @default(cuid())
+  palletId     String   @map("pallet_id")
+  reportedById String?  @map("reported_by_id")
+  description  String   @db.Text
+  /// JSON array of photo URLs (optional)
+  photoUrls    Json?
+  resolved     Boolean  @default(false)
+  resolvedAt   DateTime? @map("resolved_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  pallet       Pallet @relation(fields: [palletId], references: [id], onDelete: Cascade)
+  reportedBy   User?  @relation("DamageReporter", fields: [reportedById], references: [id], onDelete: SetNull)
+
+  @@index([palletId])
+  @@map("damage_records")
+}
+
+// ============================================================
+// NOTIFICATIONS — in-app center + optional email (FR-11)
+// ============================================================
+enum NotificationType {
+  overdue_return
+  damaged_pallet
+  delivery_delayed
+  dwell_time_exceeded
+  new_batch_manufactured
+  inventory_below_threshold
+  system
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String?          @map("user_id")
+  type      NotificationType @default(system)
+  title     String           @db.VarChar(120)
+  message   String           @db.Text
+  read      Boolean          @default(false)
+  /// Optional link to relevant pallet / report
+  link      String?          @db.VarChar(120)
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  user      User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+// ============================================================
+// AUDIT LOG — every state-changing action (FR-12.2)
+// ============================================================
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?  @map("user_id")
+  userEmail String?  @map("user_email") @db.VarChar(190)
+  action    String   @db.VarChar(80)
+  entity    String?  @db.VarChar(80)
+  entityId  String?  @map("entity_id") @db.VarChar(80)
+  /// before/after state where applicable
+  detail    String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([action])
+  @@map("audit_logs")
+}
+
+// ============================================================
+// SETTINGS — organization-level config (FR assumptions §12.5)
+// ============================================================
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String @db.VarChar(255)
+
+  @@map("settings")
+}
+
+// ============================================================
+// FLEET — trucks and drivers used during dispatch
+// ============================================================
+model Truck {
+  id               String   @id @default(cuid())
+  plateNumber      String   @unique @map("plate_number") @db.VarChar(30)
+  model            String   @default("") @db.VarChar(80)
+  capacity         Int      @default(0)
+  active           Boolean  @default(true)
+  notes            String?  @db.VarChar(255)
+  /// Currently assigned driver ID (optional, soft reference)
+  assignedDriverId String?  @map("assigned_driver_id") @db.VarChar(30)
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@map("trucks")
+}
+
+model Driver {
+  id        String   @id @default(cuid())
+  name      String   @db.VarChar(100)
+  phone     String?  @db.VarChar(30)
+  licenseNo String?  @map("license_no") @db.VarChar(50)
+  active    Boolean  @default(true)
+  notes     String?  @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("drivers")
+}
